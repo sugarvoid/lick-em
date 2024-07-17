@@ -3,7 +3,7 @@
 ![gameplay](https://github.com/sugarvoid/lick-em/blob/master/gameplay.gif)
 <br>
 
-![lickem cart](https://github.com/sugarvoid/lick-em/blob/master/carts/lickem_v1.p8.png)
+![lickem cart](https://github.com/sugarvoid/lick-em/blob/master/lickem_v1.p8.png)
 
 [Play on Itch](https://sugarvoid.itch.io/lickem) <br>
 
