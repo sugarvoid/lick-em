@@ -1,6 +1,6 @@
 # Lick 'em
 
-[Play in Browser](https://sugarvoid.itch.io/lickem) <br> 
+## [Play in Browser](https://sugarvoid.itch.io/lickem) <br> 
 
 ![gameplay](https://github.com/sugarvoid/lick-em/blob/master/gameplay.gif)
 <br>
