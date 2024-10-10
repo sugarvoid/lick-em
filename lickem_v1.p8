@@ -4,11 +4,6 @@ __lua__
 --lick 'em
 --by sugarvoid
 
-
-
---TODO: add lick particle effect  
---TODO: add random starting point
-
 obj= {
     new=function(self,tbl)
             tbl=tbl or {}
@@ -23,7 +18,7 @@ obj= {
 function _init()
     cartdata("lickem_data")
     
-	poke(0x5f5c, 255) -- set the initial delay before repeating. 255 means never repeat.
+	poke(0x5f5c, 255)
 	game_state=0
     active_human=nil
     game_running=false
@@ -58,11 +53,9 @@ function _init()
         dx=0,
         moving=false
     }
-
 end
 
 function start_game()
-    
     test_count=0
     frame_total=0
     old_frame_total=dget(0)
@@ -77,9 +70,7 @@ function start_game()
     active_human = spawn_human(slots[curr_human_slot])
     game_running=true
     p_curr_frame=1
-
 end
-
 
 function _update60()
 	if game_state == 0 then
@@ -88,7 +79,7 @@ function _update60()
             u_play()
             if sw_running then 
                 frame_total+=(1/2)^16  --0.000015259 
-                -- test_count+=(1/2)^16 KEEP 
+                -- test_count+=(1/2)^16 keep 
             end
     elseif game_state == 2 then
             u_gameover()
@@ -106,12 +97,8 @@ function _draw()
 end
 
 function u_main()
-    
-    
     if (btnp(⬅️)) title_choice-=1 if (title_choice==0) title_choice=2
     if (btnp(➡️)) title_choice+=1 if (title_choice==3) title_choice=1
-
-    
     
 	if btnp(❎) then
         if (title_choice==1) start_game()
@@ -160,7 +147,6 @@ function draw_play()
     print(get_time_from_frames(tostr(user_high_score,2)), 10, 2,7)
     print("licks left:"..licks_left, 65, 2)
     draw_controls()
-	
 end
 
 
@@ -177,7 +163,7 @@ function draw_controls()
 end
 
 function draw_player()
-    --print(get_time_from_frames(tostr(test_count, 2)), 60, 20, 7) --KEEP
+    --print(get_time_from_frames(tostr(test_count, 2)), 60, 20, 7) --keep
 	local px = slots[p1.slot]
     if p1.moving then
         p1.img = 156
@@ -265,14 +251,12 @@ function animationfinished()
 end
 
 function goto_gameover(code)
-    --round clean up
     game_running=false
     p_anim_played = true
     for h in all(humans) do
         del(humans,h)
     end
-    -- end clean up
-    
+
     sw_running=false
     failed_reason=code
     if code==0 or code==1 then
@@ -341,7 +325,7 @@ function d_gameover()
         print("you win", 30, 40,7)
 
         if frame_total < old_frame_total then 
-            print("personal best!", 30, 52,7) --TODO: make text flash 
+            print("personal best!", 30, 52,7) --todo: make text flash 
         end
         
         print(get_time_from_frames(tostr(frame_total,2)), 30, 65, 7)
@@ -363,12 +347,6 @@ end
 function cprint(s, x, y)
     print(s, x - (((#s * 4) - 1) / 2), y)
   end
-
-
-
-
-
-
 
 
 cols={8,9,10,11,}
@@ -422,111 +400,6 @@ function spawn_human(x_pos)
 end
 
 
-
-
-
--- stopwatch={
-
---     new=function(self,tbl)
---           tbl=tbl or {}
---           setmetatable(tbl,{
---               __index=self
---           })
---       tbl.running = false
---       tbl.m = 0
---       tbl.s = 0
---       tbl.f = 0
---       return tbl
---       end,
---     update=function(self)
---       if self.running then
---         self.f += 1
---         if self.f >= 60 then
---           self.f -= 60
---           self.s += 1
---         end
---         if self.s >= 60 then
---           self.s -= 60
---           self.m += 1
---         end
---       end
---     end,
---     draw=function(self,x,y,c)
---       print(self:get_string(), x, y,c)
---     end,
---     start=function(self)
---       self.running=true
---     end,
---     stop=function(self)
---       self.running=false
---     end,
---     reset=function(self)
---       self:stop()
---       self.m=0
---       self.s=0
---       self.f=0
---     end,
---     get_string=function(self)
---         -- convert frames into centiseconds
---         s_ss = sub(tostr(self.f/60), 3, 4)
-      
---         -- grab strings for min, sec
---         s_s = tostr(self.s)
---         s_m = tostr(self.m)
-      
---         -- two-zero pad all the above
---         if (#s_ss == 0) s_ss = "0"
---         if (#s_ss < 2) s_ss = s_ss.."0"
---         if (#s_s < 2) s_s = "0"..s_s
---         if (#s_m < 2) s_m = "0"..s_m
-      
---         -- return a mm:ss.cc string
---         return s_m..":"..s_s.."."..s_ss
---     end
---   }
-
---   --old_f=0
---   --old_s=0
---   --old_m=0
-
---   get_string_sw=function(f,s,m)
---     -- convert frames into centiseconds
---     s_ss = sub(tostr(f/60), 3, 4)
-  
---     -- grab strings for min, sec
---     s_s = tostr(s)
---     s_m = tostr(m)
-  
---     -- two-zero pad all the above
---     if (#s_ss == 0) s_ss = "0"
---     if (#s_ss < 2) s_ss = s_ss.."0"
---     if (#s_s < 2) s_s = "0"..s_s
---     if (#s_m < 2) s_m = "0"..s_m
-  
---     -- return a mm:ss.cc string
---     return s_m..":"..s_s.."."..s_ss
--- end
-
--- get_string_sw=function(f,s,m)
---   -- convert frames into centiseconds
---   s_ss = sub(tostr(f/60), 3, 4)
-
---   -- grab strings for min, sec
---   s_s = tostr(s)
---   s_m = tostr(m)
-
---   -- two-zero pad all the above
---   if (#s_ss == 0) s_ss = "0"
---   if (#s_ss < 2) s_ss = s_ss.."0"
---   if (#s_s < 2) s_s = "0"..s_s
---   if (#s_m < 2) s_m = "0"..s_m
-
---   -- return a mm:ss.cc string
---   return s_m..":"..s_s.."."..s_ss
--- end
-
-
-
 function get_time_from_frames(frame_total)
   local total_seconds = frame_total / 60  -- change to 30 is using _update()
   local minutes = flr(total_seconds / 60)
@@ -542,10 +415,6 @@ function pad_zero(num)
       return num
   end
 end
-
-
-
-
 
 
 __gfx__
