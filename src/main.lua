@@ -89,6 +89,8 @@ function _draw()
     elseif game_state == 2 then
 		d_gameover()
 	end
+    --print("mem: "..flr(stat(0)).."kb", 0, 0, 8)
+    --print("cpu: "..stat(1).. "%", 0, 8, 8)
 end
 
 function u_main()
@@ -293,6 +295,7 @@ function lick()
 end
 
 function draw_spots()
+    --TODO: Change color based on is actor is on spot
 	sspr(48,0,16,8,slots[1],106)
 	sspr(48,0,16,8,slots[2],106)
 	sspr(48,0,16,8,slots[3],106)
