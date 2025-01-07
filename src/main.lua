@@ -12,7 +12,6 @@ obj= {
 
 function _init()
     cartdata("lickem_data")
-    
 	poke(0x5f5c, 255)
 	game_state=0
     active_human=nil
@@ -22,7 +21,7 @@ function _init()
     title_choice=1
     showing_info=false
     title_options={"play", "info"}
-    humans={}
+    --humans={}
     player_eat={146,148,150,152,154,152,154,150,148,146}
     player_move=156
     p_curr_frame=1
@@ -313,6 +312,7 @@ end
 
 function d_gameover()
 	cls(0)
+    pal(8,active_human.col)
     if failed_reason==0 then
         --should have licked
         spr(76, 45, 20, 4,4)
@@ -330,6 +330,7 @@ function d_gameover()
         
         print(get_time_from_frames(tostr(frame_total,2)), 30, 65, 7)
     end
+    pal()
     print("⬇️ to try again", 30, 100)
 end
 
@@ -352,52 +353,52 @@ function cprint(s, x, y)
 cols={8,9,10,11,}
 
 
-human=obj:new({
-	x,y=0,
-	col=nil,
-    img=38,
-    peaked=false,
-    scared=false,
-    facing_l=true,
+-- human=obj:new({
+-- 	x,y=0,
+-- 	col=nil,
+--     img=38,
+--     peaked=false,
+--     scared=false,
+--     facing_l=true,
 	
-	update=function(self)
-        if self.scared then 
-            self.img=40
-            self.y -=1
-        end
+-- 	update=function(self)
+--         if self.scared then 
+--             self.img=40
+--             self.y -=1
+--         end
 
-        if self.y<=80 then 
-            self.peaked=true
-        end
+--         if self.y<=80 then 
+--             self.peaked=true
+--         end
 
-        if self.peaked then 
-            self.y+=4
-        end
+--         if self.peaked then 
+--             self.y+=4
+--         end
 
-		if self.y >= 130 then
-			del(humans,self)
-		end
+-- 		if self.y >= 130 then
+-- 			del(humans,self)
+-- 		end
 
-  	end,
+--   	end,
 
-	draw=function(self)
-		pal(8,self.col)
-        spr(self.img,self.x,self.y,2,2,self.facing_l)
+-- 	draw=function(self)
+-- 		pal(8,self.col)
+--         spr(self.img,self.x,self.y,2,2,self.facing_l)
         
-		pal()
-	end,
-})
+-- 		pal()
+-- 	end,
+-- })
 
-function spawn_human(x_pos)
-	new_guy = human:new()
-    new_guy.facing_l = p1.look_left
-    new_guy.img =38
-	new_guy.x=x_pos
-	new_guy.y=91
-	new_guy.col=rnd(cols)
-	add(humans,new_guy)
-    return new_guy
-end
+-- function spawn_human(x_pos)
+-- 	new_guy = human:new()
+--     new_guy.facing_l = p1.look_left
+--     new_guy.img =38
+-- 	new_guy.x=x_pos
+-- 	new_guy.y=91
+-- 	new_guy.col=rnd(cols)
+-- 	add(humans,new_guy)
+--     return new_guy
+-- end
 
 
 function get_time_from_frames(frame_total)
