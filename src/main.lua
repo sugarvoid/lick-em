@@ -1,13 +1,5 @@
 
-obj= {
-    new=function(self,tbl)
-            tbl=tbl or {}
-            setmetatable(tbl,{
-                __index=self
-            })
-            return tbl
-        end
-}
+
 
 
 function _init()
@@ -42,11 +34,15 @@ function _init()
         slot=3,
         x=slots[3],
         y=100,
-        look_left=false,
+        look_left=true,
         next_xpos=nil,
         dx=0,
         moving=false
     }
+end
+
+function reset_game()
+    
 end
 
 function start_game()
@@ -312,7 +308,10 @@ end
 
 function d_gameover()
 	cls(0)
-    pal(8,active_human.col)
+    if active_human then
+       pal(8,active_human.col) 
+    end
+    
     if failed_reason==0 then
         --should have licked
         spr(76, 45, 20, 4,4)
@@ -445,4 +444,8 @@ function shuffle(t)
         local j = flr(rnd(i)) + 1
         t[i], t[j] = t[j], t[i]
     end
+end
+
+function randi_rang(l, h)
+    return flr(rnd(h)) + l
 end

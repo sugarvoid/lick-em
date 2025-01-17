@@ -50,7 +50,7 @@ function spawn_human(x_pos)
     _h.img=38
     _h.peaked=false
     _h.scared=false
-    _h.facing_l=p1.look_left
+    _h.facing_l=not p1.look_left
     --active_human = _h
 	add(humans,_h)
     return _h
