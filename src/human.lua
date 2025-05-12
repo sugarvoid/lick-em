@@ -17,6 +17,20 @@ cols = { 8, 9, 10, 11, }
 --     return _h
 -- end
 
+function spawn_human(x_pos)
+    local h=setmetatable({},human)
+    h.x=x_pos
+    h.y=91
+    h.col=rnd(cols)
+    h.img=38
+    h.peaked=false
+    h.scared=false
+    h.facing_l=not player.look_left
+    --active_human = _h
+    add(humans,h)
+    return h
+end
+
 function human:update()
     --sfx(1)
     if self.scared then
@@ -44,17 +58,5 @@ function human:draw()
 end
 
 
-function spawn_human(x_pos)
-    local _h=setmetatable({},human)
-    _h.x=x_pos
-    _h.y=91
-	_h.col=rnd(cols)
-    _h.img=38
-    _h.peaked=false
-    _h.scared=false
-    _h.facing_l=not player.look_left
-    --active_human = _h
-	add(humans,_h)
-    return _h
-end
+
 

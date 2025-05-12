@@ -66,35 +66,26 @@ function _draw()
 end
 
 function u_main()
-    if btnp(⬅️) then title_choice -= 1 end
-    if title_choice == 0 then title_choice = 2 end
-    if btnp(➡️) then title_choice += 1 end
-    if title_choice == 3 then title_choice = 1 end
-
-    if btnp(❎) then
-        if title_choice == 1 then start_game() end
-        if title_choice == 2 then showing_info = true end
+    if btnp(🅾️) then
+        start_game() 
     end
-
-    if btnp(🅾️) and showing_info then showing_info = false end
 end
 
 
 function d_main()
     cls()
-    if showing_info then
-        cprint("how to play", 64, 20)
-        cprint("- lick 20 guys", 64, 40)
-        cprint("- 🅾️ to move", 64, 50)
-        cprint("- ❎ to lick", 64, 60)
-        cprint("how fast can you go?", 64, 75)
-        cprint("🅾️ to go back", 64, 100)
-    else
-        sspr(0, 32, 8 * 8, 4 * 8, 32, 30)
-        print("⬅️", 42, 100, 7)
-        print("➡️", 80, 100, 7)
-        cprint(title_options[title_choice], 64, 100, 7)
-    end
+    --if showing_info then
+        cprint("how to play", 40)
+        cprint("- lick 20 guys", 50)
+        cprint("- 🅾️ to move", 60)
+        cprint("- ❎ to lick", 70)
+        cprint("how fast can you go?", 90)
+
+        --cprint("🅾️ to go back", 64, 100)
+        sspr(0, 32, 8 * 8, 4 * 8, 32, 3)
+
+        cprint(" 🅾️ play",110, 7)
+    --end
 end
 
 function draw_play()
@@ -119,13 +110,13 @@ function draw_play()
 end
 
 function draw_controls()
-    if 1 == 1 then
+    --if 1 == 1 then
         print("🅾️ move", 25, 120, 7)
         print("❎ lick", 65, 120, 7)
-    else
-        print("🅾️ <--", 25, 120, 7)
-        print("❎  -->", 65, 120, 7)
-    end
+    --else
+      --  print("🅾️ <--", 25, 120, 7)
+       -- print("❎  -->", 65, 120, 7)
+    --end
 end
 
 function u_play()
@@ -230,8 +221,8 @@ function get_next()
 end
 
 -- center print
-function cprint(s, x, y)
-    print(s, x - (((#s * 4) - 1) / 2), y)
+function cprint(s, y)
+    print(s, 64 - (((#s * 4) - 1) / 2), y)
 end
 
 
