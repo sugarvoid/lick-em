@@ -5,18 +5,6 @@ human.__index=human
 
 cols = { 8, 9, 10, 11, }
 
--- function human:new()
---     local _h=setmetatable({},human)
---     _h.x=0
---     _h.y=0
--- 	_h.col=nil
---     _h.img=38
---     _h.peaked=false
---     _h.scared=false
---     _h.facing_l=true
---     return _h
--- end
-
 function spawn_human(x_pos)
     local h=setmetatable({},human)
     h.x=x_pos
@@ -26,7 +14,6 @@ function spawn_human(x_pos)
     h.peaked=false
     h.scared=false
     h.facing_l=not player.look_left
-    --active_human = _h
     add(humans,h)
     return h
 end

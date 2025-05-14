@@ -3,7 +3,7 @@ slots = { 2, 20, 38, 56, 74, 92, 110 }
 function _init()
     cartdata("lickem_data")
     poke(0x5f5c, 255)
-    game_state = 0
+
     active_human = nil
     game_running = false
     high_score = nil
@@ -19,6 +19,8 @@ function _init()
     marker_y = 85
     m_delta = 0.2
     next_slot = 2
+    start_game() 
+    game_state = 1
 end
 
 function reset_game()
@@ -32,7 +34,7 @@ function start_game()
     end
     high_score = old_frame_total
     game_state = 1
-    timer_started = false
+    --timer_started = false
     licks_left = 20
     failed_reason = nil
     active_human = spawn_human(slots[curr_human_slot])
@@ -75,16 +77,16 @@ end
 function d_main()
     cls()
     --if showing_info then
-        cprint("how to play", 40)
-        cprint("- lick 20 guys", 50)
-        cprint("- 🅾️ to move", 60)
-        cprint("- ❎ to lick", 70)
+        cprint("how to play", 40, 12)
+        cprint("lick 20 guys", 50)
+        cprint("🅾️ to move", 60)
+        cprint("❎ to lick", 70)
         cprint("how fast can you go?", 90)
 
         --cprint("🅾️ to go back", 64, 100)
         sspr(0, 32, 8 * 8, 4 * 8, 32, 3)
 
-        cprint(" 🅾️ play",110, 7)
+        cprint(" 🅾️ play",110, 12)
     --end
 end
 
@@ -95,17 +97,39 @@ function draw_play()
     --line(0,104, 128,104,15)
     draw_spots()
 
-    for h in all(humans) do
-        h:draw()
+    if not sw_running then
+        cprint("how to play", 34, 12)
+        cprint("lick 20 guys", 44)
+
+        cprint("how fast can you go?", 60)
+
+        --cprint("🅾️ to go back", 64, 100)
+        sspr(7, 40, (8 * 6) + 1, 2  * 8, 39, 10)
+        
+
+        
+    else
+        
+        print("licks left:" .. licks_left, 65, 2, 7)
+        print("⧗" .. get_time_from_frames(tostr(frame_total, 2)), 45, 35, 7)
     end
+
+    print("⧗", 2, 2, 10)
+    print(get_time_from_frames(tostr(high_score, 2)), 10, 2, 7)
+
+
+    foreach(humans, function(obj) obj:draw() end )
+
+    --for h in all(humans) do
+    --    h:draw()
+    --end
 
 
     player:draw()
     spr(17, slots[future_slot] + 4, marker_y)
-    print("⧗", 2, 2, 10)
-    print("⧗" .. get_time_from_frames(tostr(frame_total, 2)), 45, 35, 7)
-    print(get_time_from_frames(tostr(high_score, 2)), 10, 2, 7)
-    print("licks left:" .. licks_left, 65, 2)
+    
+    
+    
     draw_controls()
 end
 
@@ -121,9 +145,7 @@ end
 
 function u_play()
     player:update()
-    for h in all(humans) do
-        h:update()
-    end
+    foreach(humans, function(obj) obj:update() end )
 
     marker_y += m_delta
 
@@ -147,9 +169,10 @@ end
 function goto_gameover(code)
     game_running = false
     p_anim_played = true
-    for h in all(humans) do
-        del(humans, h)
-    end
+    foreach(humans, function(obj) del(humans, obj) end )
+    --for h in all(humans) do
+    --    del(humans, h)
+    --end
 
     sw_running = false
     failed_reason = code
@@ -221,8 +244,8 @@ function get_next()
 end
 
 -- center print
-function cprint(s, y)
-    print(s, 64 - (((#s * 4) - 1) / 2), y)
+function cprint(s, y, c)
+    print(s, 64 - (((#s * 4) - 1) / 2), y, c or 7)
 end
 
 
