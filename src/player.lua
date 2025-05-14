@@ -4,12 +4,16 @@ player = {
     slot = 3,
     x = slots[3],
     y = 100,
+    tick = 0,
     look_left = true,
     next_xpos = nil,
     dx = 0,
     moving = false,
     img_frame = 1,
     move = function(self)
+        if licks_left == 20 then
+                sw_running=true
+        end
         if self.look_left and self.slot ~= curr_human_slot + 1 then
             self.slot = self.slot - 1
             self.next_xpos = slots[self.slot]
@@ -56,10 +60,10 @@ player = {
         end
 
         if not p_anim_played then
-            tick += 1
+            self.tick += 1
             -- move to the next frame
-            if flr(tick) == 1 then
-                tick = 0
+            if flr(self.tick) == 1 then
+                self.tick = 0
                 self.img_frame = self.img_frame + 1
             end
             -- check if animation is finished
@@ -81,5 +85,7 @@ player = {
     end,
     reset = function(self)
         self.img_frame = 1
+        self.dx = 0
+        self.moving = false
     end,
 }

@@ -3,27 +3,15 @@ slots = { 2, 20, 38, 56, 74, 92, 110 }
 function _init()
     cartdata("lickem_data")
     poke(0x5f5c, 255)
-
-    active_human = nil
-    game_running = false
-    high_score = nil
+    is_game_running = false
     sw_running = false
-    title_choice = 1
-    showing_info = false
-    title_options = { "play", "info" }
-    player_eat = { 146, 148, 150, 152, 154, 152, 154, 150, 148, 146 }
     p_anim_played = true
-    tick = 0
     curr_human_slot = 1
     future_slot = 6
     marker_y = 85
     m_delta = 0.2
     next_slot = 2
-    start_game() 
-    game_state = 1
-end
-
-function reset_game()
+    start_game()
 end
 
 function start_game()
@@ -33,119 +21,59 @@ function start_game()
         old_frame_total = 8000000000
     end
     high_score = old_frame_total
-    game_state = 1
-    --timer_started = false
     licks_left = 20
     failed_reason = nil
     active_human = spawn_human(slots[curr_human_slot])
-    game_running = true
+    is_game_running = true
+    player:reset()
 end
 
 function _update60()
-    if game_state == 0 then
-        u_main()
-    elseif game_state == 1 then
-        u_play()
-        if sw_running then
-            frame_total += (1 / 2) ^ 16 --0.000015259
-            -- test_count+=(1/2)^16 keep
-        end
-    elseif game_state == 2 then
-        u_gameover()
+    if is_game_running then
+        update_play()
+    else
+        update_gameover()
     end
 end
 
 function _draw()
-    if game_state == 0 then
-        d_main()
-    elseif game_state == 1 then
-        draw_play()
-    elseif game_state == 2 then
-        d_gameover()
-    end
-    --print("mem: "..flr(stat(0)).."kb", 0, 0, 8)
-    --print("cpu: "..stat(1).. "%", 0, 8, 8)
-end
-
-function u_main()
-    if btnp(🅾️) then
-        start_game() 
-    end
-end
-
-
-function d_main()
     cls()
-    --if showing_info then
-        cprint("how to play", 40, 12)
-        cprint("lick 20 guys", 50)
-        cprint("🅾️ to move", 60)
-        cprint("❎ to lick", 70)
-        cprint("how fast can you go?", 90)
-
-        --cprint("🅾️ to go back", 64, 100)
-        sspr(0, 32, 8 * 8, 4 * 8, 32, 3)
-
-        cprint(" 🅾️ play",110, 12)
-    --end
+    if is_game_running then
+        draw_play()
+    else
+        draw_gameover()
+    end
 end
 
 function draw_play()
-    cls(0)
-    
     rectfill(0, 104, 128, 128, 4)
-    --line(0,104, 128,104,15)
     draw_spots()
 
     if not sw_running then
-        cprint("how to play", 34, 12)
         cprint("lick 20 guys", 44)
-
-        cprint("how fast can you go?", 60)
-
-        --cprint("🅾️ to go back", 64, 100)
-        sspr(7, 40, (8 * 6) + 1, 2  * 8, 39, 10)
-        
-
-        
+        cprint("how fast can you go?", 55)
+        sspr(7, 40, 49, 16, 39, 20)
     else
-        
         print("licks left:" .. licks_left, 65, 2, 7)
         print("⧗" .. get_time_from_frames(tostr(frame_total, 2)), 45, 35, 7)
     end
 
     print("⧗", 2, 2, 10)
     print(get_time_from_frames(tostr(high_score, 2)), 10, 2, 7)
-
-
-    foreach(humans, function(obj) obj:draw() end )
-
-    --for h in all(humans) do
-    --    h:draw()
-    --end
-
-
+    foreach(humans, function(obj) obj:draw() end)
     player:draw()
     spr(17, slots[future_slot] + 4, marker_y)
-    
-    
-    
     draw_controls()
 end
 
 function draw_controls()
-    --if 1 == 1 then
-        print("🅾️ move", 25, 120, 7)
-        print("❎ lick", 65, 120, 7)
-    --else
-      --  print("🅾️ <--", 25, 120, 7)
-       -- print("❎  -->", 65, 120, 7)
-    --end
+    print("🅾️ move", 25, 120, 7)
+    print("❎ lick", 65, 120, 7)
 end
 
-function u_play()
+function update_play()
     player:update()
-    foreach(humans, function(obj) obj:update() end )
+    foreach(humans, function(obj) obj:update() end)
 
     marker_y += m_delta
 
@@ -157,80 +85,70 @@ function u_play()
 
     if btnp(4) then player:move() end
     if btnp(5) then player:lick() end
+
+    if sw_running then
+        frame_total += (1 / 2) ^ 16 --0.000015259
+    end
 end
 
 function animationfinished()
-    if game_running then
+    if is_game_running then
         active_human = spawn_human(slots[curr_human_slot])
         get_next()
     end
 end
 
 function goto_gameover(code)
-    game_running = false
+    is_game_running = false
     p_anim_played = true
-    foreach(humans, function(obj) del(humans, obj) end )
-    --for h in all(humans) do
-    --    del(humans, h)
-    --end
-
+    foreach(humans, function(obj) del(humans, obj) end)
     sw_running = false
     failed_reason = code
     if code == 0 or code == 1 then
         sfx(0)
     else
         sfx(3)
-        --printh('saving: '..sw.f..", m"..sw.m..", s"..sw.m, 'save_time.txt')
         if frame_total < old_frame_total then
             dset(0, frame_total)
         end
     end
-
-    game_state = 2
 end
 
 function draw_spots()
     --TODO: Change color based on is actor is on spot
-    sspr(48, 0, 16, 8, slots[1], 106)
-    sspr(48, 0, 16, 8, slots[2], 106)
-    sspr(48, 0, 16, 8, slots[3], 106)
-    sspr(48, 0, 16, 8, slots[4], 106)
-    sspr(48, 0, 16, 8, slots[5], 106)
-    sspr(48, 0, 16, 8, slots[6], 106)
-    sspr(48, 0, 16, 8, slots[7], 106)
+    for i=1, 7 ,1 do
+        sspr(48, 0, 16, 8, slots[i], 105)
+    end
 end
 
-function u_gameover()
+function update_gameover()
     if btnp(⬇️) then
         start_game()
     end
 end
 
-function d_gameover()
-    cls(0)
-    if active_human then
-        pal(8, active_human.col)
-    end
-
+function draw_gameover()
     if failed_reason == 0 then
-        --should have licked
-        spr(76, 45, 20, 4, 4)
-        print("bad lick", 30, 60, 7)
-    elseif failed_reason == 1 then
         --should have moved
+        spr(76, 45, 20, 4, 4)
+        cprint("bad lick", 60)
+    elseif failed_reason == 1 then
+        --should have licked
+        pal(8, active_human.col)
         spr(72, 45, 20, 4, 4)
-        print("bad move", 30, 60, 7)
+        pal()
+        cprint("bad move", 60)
     elseif failed_reason == 2 then
-        print("you win", 30, 40, 7)
+        cprint("you win", 40, 7)
 
         if frame_total < old_frame_total then
-            print("personal best!", 30, 52, 7) --todo: make text flash
+            cprint("personal best!", 52, 7) --todo: make text flash
         end
 
-        print(get_time_from_frames(tostr(frame_total, 2)), 30, 65, 7)
+        cprint(get_time_from_frames(tostr(frame_total, 2)), 65, 7)
     end
-    pal()
-    print("⬇️ to try again", 30, 100)
+
+    cprint("⬇️ to try again", 100)
 end
 
 function get_next()
@@ -247,57 +165,6 @@ end
 function cprint(s, y, c)
     print(s, 64 - (((#s * 4) - 1) / 2), y, c or 7)
 end
-
-
-
-
--- human=obj:new({
--- 	x,y=0,
--- 	col=nil,
---     img=38,
---     peaked=false,
---     scared=false,
---     facing_l=true,
-
--- 	update=function(self)
---         if self.scared then
---             self.img=40
---             self.y -=1
---         end
-
---         if self.y<=80 then
---             self.peaked=true
---         end
-
---         if self.peaked then
---             self.y+=4
---         end
-
--- 		if self.y >= 130 then
--- 			del(humans,self)
--- 		end
-
---   	end,
-
--- 	draw=function(self)
--- 		pal(8,self.col)
---         spr(self.img,self.x,self.y,2,2,self.facing_l)
-
--- 		pal()
--- 	end,
--- })
-
--- function spawn_human(x_pos)
--- 	new_guy = human:new()
---     new_guy.facing_l = p1.look_left
---     new_guy.img =38
--- 	new_guy.x=x_pos
--- 	new_guy.y=91
--- 	new_guy.col=rnd(cols)
--- 	add(humans,new_guy)
---     return new_guy
--- end
-
 
 function get_time_from_frames(frame_total)
     local total_seconds = frame_total / 60 -- change to 30 is using _update()
@@ -318,30 +185,3 @@ end
 function print_debug(str)
     printh("debug: " .. str, 'debug.txt')
 end
-
--- function hcenter(s)
---     -- screen center minus the
---     -- string length times the
---     -- pixels in a char's width,
---     -- cut in half
---     return 64 - #s * 2
--- end
-
--- function vcenter(s)
---     -- screen center minus the
---     -- string height in pixels,
---     -- cut in half
---     return 61
--- end
-
--- function shuffle(t)
---     -- do a fisher-yates shuffle
---     for i = #t, 1, -1 do
---         local j = flr(rnd(i)) + 1
---         t[i], t[j] = t[j], t[i]
---     end
--- end
-
--- function randi_rang(l, h)
---     return flr(rnd(h)) + l
--- end

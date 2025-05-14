@@ -3,7 +3,7 @@ humans={}
 human={}
 human.__index=human
 
-cols = { 8, 9, 10, 11, }
+cols = { 8, 9, 10, 14, }
 
 function spawn_human(x_pos)
     local h=setmetatable({},human)
