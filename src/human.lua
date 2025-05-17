@@ -43,7 +43,3 @@ function human:draw()
     spr(self.img,self.x,self.y,2,2,self.facing_l)
 	pal()
 end
-
-
-
-

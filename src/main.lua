@@ -6,15 +6,33 @@ function _init()
     is_game_running = false
     sw_running = false
     p_anim_played = true
-    curr_human_slot = 1
-    future_slot = 6
+    curr_human_slot = nil
+    future_slot = nil
     marker_y = 85
     m_delta = 0.2
     next_slot = 2
-    start_game()
+    gameover_col = 8
+    --reset_spots()
+    reset_game()
 end
 
-function start_game()
+function get_spots()
+    local x = rnd({3,4,5})
+    local result = {x - 2, x, x + 2}
+    shuffle(result)
+    return result
+end
+
+function reset_spots()
+    local spots = get_spots()
+    curr_human_slot = spots[1]
+    future_slot = spots[2]
+    player.slot = spots[3]
+    active_human = spawn_human(slots[curr_human_slot])
+end
+
+function reset_game()
+    reset_spots()
     frame_total = 0
     old_frame_total = dget(0)
     if old_frame_total == 0 then
@@ -23,7 +41,7 @@ function start_game()
     high_score = old_frame_total
     licks_left = 20
     failed_reason = nil
-    active_human = spawn_human(slots[curr_human_slot])
+    --active_human = spawn_human(slots[curr_human_slot])
     is_game_running = true
     player:reset()
 end
@@ -50,15 +68,10 @@ function draw_play()
     draw_spots()
 
     if not sw_running then
-
-
         cprint("how to play", 38, 12)
         cprint("lick 20 guys", 46)
         cprint("how fast can you go?", 64)
         sspr(8, 40, 48, 16, 20, 2, 96, 32)
-
-
-
     else
         print("licks left:" .. licks_left, 65, 2, 7)
         print("⧗" .. get_time_from_frames(tostr(frame_total, 2)), 45, 35, 7)
@@ -100,6 +113,7 @@ end
 function animationfinished()
     if is_game_running then
         active_human = spawn_human(slots[curr_human_slot])
+        gameover_col = active_human.col
         get_next()
     end
 end
@@ -121,7 +135,6 @@ function goto_gameover(code)
 end
 
 function draw_spots()
-    --TODO: Change color based on is actor is on spot
     for i=1, 7 ,1 do
         sspr(48, 0, 16, 8, slots[i], 105)
     end
@@ -129,7 +142,7 @@ end
 
 function update_gameover()
     if btnp(⬇️) then
-        start_game()
+        reset_game()
     end
 end
 
@@ -140,7 +153,7 @@ function draw_gameover()
         cprint("bad lick", 60)
     elseif failed_reason == 1 then
         --should have licked
-        pal(8, active_human.col)
+        pal(8, gameover_col)
         spr(72, 45, 20, 4, 4)
         pal()
         cprint("bad move", 60)
@@ -191,3 +204,15 @@ end
 function print_debug(str)
     printh("debug: " .. str, 'debug.txt')
 end
+
+
+ 	
+
+function shuffle(t)
+    -- do a fisher-yates shuffle
+    for i = #t, 1, -1 do
+      local j = flr(rnd(i)) + 1
+      t[i], t[j] = t[j], t[i]
+    end
+  end
+  

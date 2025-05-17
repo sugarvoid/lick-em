@@ -1,9 +1,9 @@
 lick_frames = { 146, 148, 150, 152, 154, 152, 154,  150, 148, 146 }
 
 player = {
-    slot = 3,
-    x = slots[3],
-    y = 100,
+    slot = nil,
+    x = nil,
+    --y = 100,
     tick = 0,
     look_left = true,
     next_xpos = nil,
@@ -60,7 +60,7 @@ player = {
         end
 
         if not p_anim_played then
-            self.tick += 0.5
+            self.tick += 1
             -- move to the next frame
             if flr(self.tick) == 1 then
                 self.tick = 0
@@ -87,5 +87,9 @@ player = {
         self.img_frame = 1
         self.dx = 0
         self.moving = false
+        self.x = slots[self.slot]
     end,
+    --place = function(self)
+     --   self.x = slots[self.slot]
+    --end,
 }
