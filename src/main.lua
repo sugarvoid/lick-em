@@ -46,13 +46,19 @@ function _draw()
 end
 
 function draw_play()
-    rectfill(0, 104, 128, 128, 4)
+    --rect(-1, 104, 128, 128, 4)
     draw_spots()
 
     if not sw_running then
-        cprint("lick 20 guys", 44)
-        cprint("how fast can you go?", 55)
-        sspr(7, 40, 49, 16, 39, 20)
+
+
+        cprint("how to play", 38, 12)
+        cprint("lick 20 guys", 46)
+        cprint("how fast can you go?", 64)
+        sspr(8, 40, 48, 16, 20, 2, 96, 32)
+
+
+
     else
         print("licks left:" .. licks_left, 65, 2, 7)
         print("⧗" .. get_time_from_frames(tostr(frame_total, 2)), 45, 35, 7)

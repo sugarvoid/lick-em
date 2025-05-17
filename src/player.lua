@@ -1,4 +1,4 @@
-lick_frames = { 146, 148, 150, 152, 154, 152, 154, 150, 148, 146 }
+lick_frames = { 146, 148, 150, 152, 154, 152, 154,  150, 148, 146 }
 
 player = {
     slot = 3,
@@ -60,7 +60,7 @@ player = {
         end
 
         if not p_anim_played then
-            self.tick += 1
+            self.tick += 0.5
             -- move to the next frame
             if flr(self.tick) == 1 then
                 self.tick = 0
@@ -81,7 +81,7 @@ player = {
             self.img = lick_frames[self.img_frame]
         end
 
-        spr(self.img, self.x, 83, 2, 3, not self.look_left)
+        spr(self.img, self.x, 84, 2, 3, not self.look_left)
     end,
     reset = function(self)
         self.img_frame = 1

@@ -8,7 +8,7 @@ cols = { 8, 9, 10, 14, }
 function spawn_human(x_pos)
     local h=setmetatable({},human)
     h.x=x_pos
-    h.y=91
+    h.y=93
     h.col=rnd(cols)
     h.img=38
     h.peaked=false
