@@ -28,6 +28,10 @@
 
 ## Changelog
 
+### [v1.1]
+-	Change art style.
+-	Make time font large
+
 ### [v1.0]
 
 -   Fixed bug where if pressed fast enough, the player would move to previous human, not new
@@ -39,3 +43,5 @@
 -   Added gameover images
 
 ### [v0.1]
+
+-	Game is playable
