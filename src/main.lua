@@ -74,7 +74,7 @@ function draw_play()
         sspr(8, 40, 48, 16, 20, 2, 96, 32)
     else
         print("licks left:" .. licks_left, 65, 2, 7)
-        print("⧗" .. get_time_from_frames(tostr(frame_total, 2)), 45, 35, 7)
+        print("\^w\^t" .. get_time_from_frames(tostr(frame_total, 2)), 32, 35, 7)
     end
 
     print("⧗", 2, 2, 10)
