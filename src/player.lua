@@ -3,7 +3,6 @@ lick_frames = { 146, 148, 150, 152, 154, 152, 154,  150, 148, 146 }
 player = {
     slot = nil,
     x = nil,
-    --y = 100,
     tick = 0,
     look_left = true,
     next_xpos = nil,
@@ -12,7 +11,7 @@ player = {
     img_frame = 1,
     move = function(self)
         if licks_left == 20 then
-                sw_running=true
+            sw_running=true
         end
         if self.look_left and self.slot ~= curr_human_slot + 1 then
             self.slot = self.slot - 1
@@ -27,7 +26,6 @@ player = {
             self.moving = true
             sfx(1)
         else
-            --should have licked
             goto_gameover(1)
         end
     end,
@@ -89,7 +87,4 @@ player = {
         self.moving = false
         self.x = slots[self.slot]
     end,
-    --place = function(self)
-     --   self.x = slots[self.slot]
-    --end,
 }

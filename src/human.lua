@@ -5,9 +5,9 @@ human.__index=human
 
 cols = { 8, 9, 10, 14, }
 
-function spawn_human(x_pos)
+function spawn_human(_x)
     local h=setmetatable({},human)
-    h.x=x_pos
+    h.x=_x
     h.y=93
     h.col=rnd(cols)
     h.img=38
@@ -19,7 +19,6 @@ function spawn_human(x_pos)
 end
 
 function human:update()
-    --sfx(1)
     if self.scared then
         self.img=40
         self.y -=1

@@ -10,7 +10,7 @@ function _init()
     future_slot = nil
     marker_y = 85
     m_delta = 0.2
-    next_slot = 2
+    --next_slot = 2
     gameover_col = 8
     --reset_spots()
     reset_game()
@@ -64,11 +64,9 @@ function _draw()
 end
 
 function draw_play()
-    --rect(-1, 104, 128, 128, 4)
     draw_spots()
-
     if not sw_running then
-        cprint("how to play", 38, 12)
+        cprint("goal", 38, 12)
         cprint("lick 20 guys", 46)
         cprint("how fast can you go?", 64)
         sspr(8, 40, 48, 16, 20, 2, 96, 32)
@@ -76,7 +74,6 @@ function draw_play()
         print("licks left:" .. licks_left, 65, 2, 7)
         print("\^w\^t" .. get_time_from_frames(tostr(frame_total, 2)), 32, 35, 7)
     end
-
     print("⧗", 2, 2, 10)
     print(get_time_from_frames(tostr(high_score, 2)), 10, 2, 7)
     foreach(humans, function(obj) obj:draw() end)
@@ -205,9 +202,6 @@ function print_debug(str)
     printh("debug: " .. str, 'debug.txt')
 end
 
-
- 	
-
 function shuffle(t)
     -- do a fisher-yates shuffle
     for i = #t, 1, -1 do
@@ -215,4 +209,3 @@ function shuffle(t)
       t[i], t[j] = t[j], t[i]
     end
   end
-  
