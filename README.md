@@ -1,21 +1,13 @@
 # Lick 'em
+![lickem_4](https://github.com/user-attachments/assets/7b797095-2489-4a25-89a6-c2cd61504d56)
+## [Play in Browser](https://sugarvoid.itch.io/lickem)
 
-## [Play in Browser](https://sugarvoid.itch.io/lickem) <br> 
-
-![gameplay](https://github.com/sugarvoid/lick-em/blob/master/gameplay.gif)
-<br>
-
-![lickem cart](https://github.com/sugarvoid/lick-em/blob/master/lickem_v1.p8.png)
-
-
-<hr>
 
 ## Goal :dart:
 
 -   When next to human, lick them.
 -   When away from the human, move to it.
 
-<hr>
 
 ## Controls :joystick:
 
@@ -24,7 +16,7 @@
 |  X  |  Move  |
 |  O  |  Lick  |
 
-<hr>
+
 
 ## Changelog
 
